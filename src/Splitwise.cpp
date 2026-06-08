@@ -1,4 +1,5 @@
 #include "../include/Splitwise.h"
+#include <cmath>
 #include <iostream>
 #include <queue>
 #include <utility>
@@ -90,7 +91,7 @@ void Splitwise::simplifyDebts()
 {
     priority_queue<pair<double,string>> creditors;
     priority_queue<pair<double,string>> debtors;
-    
+
     for(auto &entry : balances)
     {
         if(entry.second > 0)
@@ -102,73 +103,78 @@ void Splitwise::simplifyDebts()
             debtors.push({-entry.second, entry.first});
         }
     }
-    while(!creditors.empty() &&
-      !debtors.empty())
-{
-    auto creditor = creditors.top();
-    creditors.pop();
 
-    auto debtor = debtors.top();
-    debtors.pop();
-
-    double amount =
-        min(creditor.first,
-            debtor.first);
-    
-    Settlement s;
-    s.debtor = debtor.second;
-    s.creditor = creditor.second;
-    s.amount = amount;
-    
-    settlements.push_back(s);
-
-    cout << debtor.second
-         << " pays "
-         << creditor.second
-         << " : "
-         << amount
-         << endl;
-
-    double remainingCreditor =
-        creditor.first - amount;
-
-    double remainingDebtor =
-        debtor.first - amount;
-
-    if(remainingCreditor > 0)
+    if(creditors.empty() && debtors.empty())
     {
-        creditors.push({
-            remainingCreditor,
-            creditor.second
-        });
-    }
-
-    if(remainingDebtor > 0)
-    {
-        debtors.push({
-            remainingDebtor,
-            debtor.second
-        });
-    }
-}
-}
-void Splitwise::showSettlements()
-{
-    if(settlements.empty())
-    {
-        cout << "No settlements generated.\n";
+        cout << "No settlements required.\n";
         return;
     }
 
-    cout << "\nSettlement History\n";
+    cout << "\nSettlement Transactions:\n";
 
-    for(auto &s : settlements)
+    while(!creditors.empty() &&
+          !debtors.empty())
     {
-        cout << s.debtor
+        auto creditor = creditors.top();
+        creditors.pop();
+
+        auto debtor = debtors.top();
+        debtors.pop();
+
+        double amount =
+            min(creditor.first,
+                debtor.first);
+
+        // Save settlement history
+        Settlement s;
+
+        s.debtor = debtor.second;
+        s.creditor = creditor.second;
+        s.amount = amount;
+
+        settlements.push_back(s);
+
+        // Print transaction
+        cout << debtor.second
              << " pays "
-             << s.creditor
+             << creditor.second
              << " : "
-             << s.amount
+             << amount
              << endl;
+
+        // Update balances
+        balances[debtor.second] += amount;
+        balances[creditor.second] -= amount;
+
+        // Fix floating point noise
+        if(abs(balances[debtor.second]) < 0.01)
+            balances[debtor.second] = 0;
+
+        if(abs(balances[creditor.second]) < 0.01)
+            balances[creditor.second] = 0;
+
+        double remainingCreditor =
+            creditor.first - amount;
+
+        double remainingDebtor =
+            debtor.first - amount;
+
+        if(remainingCreditor > 0)
+        {
+            creditors.push({
+                remainingCreditor,
+                creditor.second
+            });
+        }
+
+        if(remainingDebtor > 0)
+        {
+            debtors.push({
+                remainingDebtor,
+                debtor.second
+            });
+        }
     }
+
+    cout << "\nAll debts settled successfully.\n";
 }

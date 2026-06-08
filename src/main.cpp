@@ -6,7 +6,7 @@ using namespace std;
 int main()
 {
     Splitwise app;
-
+    app.loadData();
     int choice;
 
     do

@@ -15,7 +15,8 @@ int main()
 
         cout << "1. Add Expense\n";
         cout << "2. View Expenses\n";
-        cout << "3. Exit\n";
+        cout << "3. Show balances\n";
+        cout << "4. Exit\n";
 
         cout << "Enter choice: ";
         cin >> choice;
@@ -29,16 +30,20 @@ int main()
             case 2:
                 app.showExpenses();
                 break;
-
+            
             case 3:
-                cout << "Goodbye!\n";
+                app.showBalances();
                 break;
 
+            case 4:
+                cout << "Goodbye!\n";
+                break;
+            
             default:
                 cout << "Invalid choice\n";
         }
 
-    } while(choice != 3);
+    } while(choice != 4);
 
     return 0;
 }

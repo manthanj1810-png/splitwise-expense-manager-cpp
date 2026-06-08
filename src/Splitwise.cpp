@@ -1,5 +1,8 @@
 #include "../include/Splitwise.h"
 #include <iostream>
+#include <queue>
+#include <utility>
+#include <string>
 
 using namespace std;
 
@@ -82,4 +85,63 @@ void Splitwise::showBalances()
              << entry.second
              << endl;
     }
+}
+void Splitwise::simplifyDebts()
+{
+    priority_queue<pair<double,string>> creditors;
+    priority_queue<pair<double,string>> debtors;
+    
+    for(auto &entry : balances)
+    {
+        if(entry.second > 0)
+        {
+            creditors.push({entry.second, entry.first});
+        }
+        else if(entry.second < 0)
+        {
+            debtors.push({-entry.second, entry.first});
+        }
+    }
+    while(!creditors.empty() &&
+      !debtors.empty())
+{
+    auto creditor = creditors.top();
+    creditors.pop();
+
+    auto debtor = debtors.top();
+    debtors.pop();
+
+    double amount =
+        min(creditor.first,
+            debtor.first);
+
+    cout << debtor.second
+         << " pays "
+         << creditor.second
+         << " : "
+         << amount
+         << endl;
+
+    double remainingCreditor =
+        creditor.first - amount;
+
+    double remainingDebtor =
+        debtor.first - amount;
+
+    if(remainingCreditor > 0)
+    {
+        creditors.push({
+            remainingCreditor,
+            creditor.second
+        });
+    }
+
+    if(remainingDebtor > 0)
+    {
+        debtors.push({
+            remainingDebtor,
+            debtor.second
+        });
+    }
+}
 }

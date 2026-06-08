@@ -16,10 +16,8 @@ int main()
         cout << "1. Add Expense\n";
         cout << "2. View Expenses\n";
         cout << "3. Show balances\n";
-        cout << "4. Generate Settlement Plan\n";
-        cout << "5. Execute Settlements\n";
-        cout << "6. Show Settlements history\n";
-        cout << "7. Exit\n";
+        cout << "4. simplifyDebts\n";
+        cout << "5. Exit\n";
 
         cout << "Enter choice: ";
         cin >> choice;
@@ -39,18 +37,10 @@ int main()
                 break;
             
             case 4:
-                app.generateSettlementPlan();
+                app.simplifyDebts();
                 break;
             
             case 5:
-                app.executeSettlements();
-                break;
-            
-            case 6:
-                app.showSettlement();
-                break;
-            
-            case 7:
                 cout << "Goodbye!\n";
                 break;
             
@@ -58,7 +48,7 @@ int main()
                 cout << "Invalid choice\n";
         }
 
-    } while(choice != 7);
+    } while(choice != 5);
 
     return 0;
 }

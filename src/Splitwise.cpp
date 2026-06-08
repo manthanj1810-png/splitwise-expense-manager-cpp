@@ -199,3 +199,46 @@ void Splitwise::saveData()
 
     file.close();
 }
+void Splitwise::loadData()
+{
+    ifstream file("data.txt");
+
+    if(!file.is_open())
+    {
+        return;
+    }
+
+    expenses.clear();
+    balances.clear();
+
+    string payer;
+    double amount;
+    int n;
+
+    while(file >> payer >> amount >> n)
+    {
+        Expense expense;
+
+        expense.payer = payer;
+        expense.amount = amount;
+
+        double share = amount / n;
+
+        balances[payer] += amount;
+
+        for(int i = 0; i < n; i++)
+        {
+            string participant;
+
+            file >> participant;
+
+            expense.participants.push_back(participant);
+
+            balances[participant] -= share;
+        }
+
+        expenses.push_back(expense);
+    }
+
+    file.close();
+}

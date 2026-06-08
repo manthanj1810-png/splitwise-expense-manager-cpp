@@ -19,7 +19,7 @@ void Splitwise::addExpense()
     cout << "Enter number of participants: ";
     cin >> n;
     share= expense.amount/n;
-    balances[expense.payer]+=amount;
+    balances[expense.payer]+= expense.amount;
     for(int i = 0; i < n; i++)
     {
         string name;

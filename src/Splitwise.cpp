@@ -114,6 +114,13 @@ void Splitwise::simplifyDebts()
     double amount =
         min(creditor.first,
             debtor.first);
+    
+    Settlement s;
+    s.debtor = debtor.second;
+    s.creditor = creditor.second;
+    s.amount = amount;
+    
+    settlements.push_back(s);
 
     cout << debtor.second
          << " pays "
@@ -144,4 +151,24 @@ void Splitwise::simplifyDebts()
         });
     }
 }
+}
+void Splitwise::showSettlements()
+{
+    if(settlements.empty())
+    {
+        cout << "No settlements generated.\n";
+        return;
+    }
+
+    cout << "\nSettlement History\n";
+
+    for(auto &s : settlements)
+    {
+        cout << s.debtor
+             << " pays "
+             << s.creditor
+             << " : "
+             << s.amount
+             << endl;
+    }
 }

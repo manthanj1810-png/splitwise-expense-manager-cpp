@@ -17,9 +17,7 @@ public:
     void addExpense();
     void showExpenses();
     void showBalances();
-    void generateSettlementPlan();
-    void executeSettlements();
-    void showSettlements();
+    void simplifyDebts();
 };
 
 #endif

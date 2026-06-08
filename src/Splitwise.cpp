@@ -4,6 +4,7 @@
 #include <queue>
 #include <utility>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -35,7 +36,7 @@ void Splitwise::addExpense()
     }
 
     expenses.push_back(expense);
-
+    saveData();
     cout << "Expense added successfully!\n";
 }
 
@@ -177,4 +178,24 @@ void Splitwise::simplifyDebts()
     }
 
     cout << "\nAll debts settled successfully.\n";
+}
+void Splitwise::saveData()
+{
+    ofstream file("data.txt");
+
+    for(auto &expense : expenses)
+    {
+        file << expense.payer << " ";
+        file << expense.amount << " ";
+        file << expense.participants.size() << " ";
+
+        for(auto &person : expense.participants)
+        {
+            file << person << " ";
+        }
+
+        file << endl;
+    }
+
+    file.close();
 }

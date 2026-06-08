@@ -8,6 +8,7 @@ void Splitwise::addExpense()
     Expense expense;
 
     int n;
+    double share;
 
     cout << "Enter payer: ";
     cin >> expense.payer;
@@ -17,14 +18,15 @@ void Splitwise::addExpense()
 
     cout << "Enter number of participants: ";
     cin >> n;
-
+    share= expense.amount/n;
+    balances[expense.payer]+=amount;
     for(int i = 0; i < n; i++)
     {
         string name;
 
         cout << "Participant " << i + 1 << ": ";
         cin >> name;
-
+        balances[name]-=share;
         expense.participants.push_back(name);
     }
 
@@ -61,5 +63,23 @@ void Splitwise::showExpenses()
         }
 
         cout << endl;
+    }
+}
+void Splitwise::showBalances()
+{
+    if(balances.empty())
+    {
+        cout << "No balances available.\n";
+        return;
+    }
+
+    cout << "\nBalances:\n";
+
+    for(auto &entry : balances)
+    {
+        cout << entry.first
+             << " : "
+             << entry.second
+             << endl;
     }
 }

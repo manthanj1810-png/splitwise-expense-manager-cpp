@@ -135,7 +135,7 @@ void Splitwise::simplifyDebts()
 
         settlements.push_back(s);
 
-        // Print transaction
+        
         cout << debtor.second
              << " pays "
              << creditor.second
@@ -143,7 +143,7 @@ void Splitwise::simplifyDebts()
              << amount
              << endl;
 
-        // Update balances
+        
         balances[debtor.second] += amount;
         balances[creditor.second] -= amount;
 
